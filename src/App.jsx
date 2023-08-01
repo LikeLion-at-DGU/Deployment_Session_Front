@@ -11,6 +11,25 @@ const API = axios.create({
   },
 });
 
+const ex = [
+  {
+      "id": 1,
+      "writer": "안유성",
+      "created_at": "2023-07-24T11:46:58.584841+09:00"
+  },
+  {
+      "id": 2,
+      "writer": "안유성",
+      "created_at": "2023-07-24T11:47:06.935967+09:00"
+  },
+  {
+      "id": 3,
+      "writer": "안유성",
+      "created_at": "2023-07-24T11:51:47.193204+09:00"
+  }
+]
+
+
 function App() {
   const [count, setCount] = useState(0)
   const [text, setText] = useState('')
@@ -54,7 +73,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className='logo__box'>
         <a href="https://www.likelion.net/" target="_blank">
           <img src={ll} className="logo" alt="LikeLion logo" />
         </a>
@@ -63,11 +82,19 @@ function App() {
         </a>
       </div>
       <h1>AWS Deployment Session</h1>
+      <div className="data__list">
+        {ex.map(i => (
+          <div className='data__item'>
+            <div className='data__item__text'></div>
+            <div className='data__item__time'></div>
+          </div>
+        ))}
+      </div>
       <div className="card">
         <form>
           <input onChange={onChange} placeholder='Write Your Content' />
           <button onClick={() => setCount((count) => count + 1)}>
-          Post request is {count}
+          Post request is {text.length > 0 ? `"${text}"` : ``}
           </button>
         </form>
         <p>
