@@ -3,35 +3,18 @@ import ll from './assets/ll.png'
 import dgu from './assets/dgu.png'
 import './App.css'
 import axios from "axios";
+import {useForm} from "react-hook-form"
 
 const API = axios.create({
-  baseURL: "http://15.165.4.227",
+  baseURL: "http://15.165.4.227:8000",
   headers:{
       "Content-Type": "application/json",
   },
 });
 
-const ex = [
-  {
-      "id": 1,
-      "writer": "안유성",
-      "created_at": "2023-07-24T11:46:58.584841+09:00"
-  },
-  {
-      "id": 2,
-      "writer": "안유성",
-      "created_at": "2023-07-24T11:47:06.935967+09:00"
-  },
-  {
-      "id": 3,
-      "writer": "안유성",
-      "created_at": "2023-07-24T11:51:47.193204+09:00"
-  }
-]
-
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {register, handleSubmit, setValue} = useForm();
   const [text, setText] = useState('')
   const [data, setData] = useState([])
 
@@ -39,16 +22,12 @@ function App() {
     setText(e.target.value)	
   }
 
-  const onReset = () => {			
-    setText("")			
-  }
-
   const getData = async() => {
     try{
       const data = await API.get("/api")
-      console.log(data);
+      setData(data.data);
     }catch(error){
-
+      console.log(error)
     }
   }
 
@@ -62,9 +41,12 @@ function App() {
                 //setInfo(response.data)
             }
         )
+
+        setValue("content" , "")
     } catch(error){
         console.log(error)
     }
+    
   }
 
   useEffect(()=>{
@@ -83,17 +65,17 @@ function App() {
       </div>
       <h1>AWS Deployment Session</h1>
       <div className="data__list">
-        {ex.map(i => (
-          <div className='data__item'>
-            <div className='data__item__text'></div>
-            <div className='data__item__time'></div>
+        {data.map(i => (
+          <div key={i.id} className='data__item'>
+            <div className='data__item__text'>{i.writer}</div>
+            <div className='data__item__time'>{i.created_at.substr(0,10)}</div>
           </div>
         ))}
       </div>
       <div className="card">
-        <form>
-          <input onChange={onChange} placeholder='Write Your Content' />
-          <button onClick={() => setCount((count) => count + 1)}>
+        <form onSubmit={handleSubmit(sendPost)}> 
+          <input {...register("content", {required : true})} onChange={onChange} placeholder='Write Your Content' />
+          <button >
           Post request is {text.length > 0 ? `"${text}"` : ``}
           </button>
         </form>
