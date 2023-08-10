@@ -5,8 +5,9 @@ import './App.css'
 import axios from "axios";
 import {useForm} from "react-hook-form"
 
-const API = axios.create({
-  baseURL: "http://15.165.4.227:8000",
+
+const PAPI = axios.create({
+  baseURL: "http://15.165.4.227",
   headers:{
       "Content-Type": "application/json",
   },
@@ -24,8 +25,9 @@ function App() {
 
   const getData = async() => {
     try{
-      const data = await API.get("/api")
-      setData(data.data);
+      const data = await PAPI.get("/api/")
+      const rd = data.data.reverse()
+      setData(rd);
     }catch(error){
       console.log(error)
     }
@@ -36,13 +38,13 @@ function App() {
       "writer" : text
     }
     try{
-        await API.post('/api', data).then(
+        await PAPI.post('/api/', data).then(
             response => {
-                //setInfo(response.data)
+                window.alert(`${response.data.message}`)
             }
         )
-
         setValue("content" , "")
+        setText("")
     } catch(error){
         console.log(error)
     }
@@ -51,7 +53,7 @@ function App() {
 
   useEffect(()=>{
     getData();
-  }, [])
+  }, [data])
 
   return (
     <>
@@ -74,7 +76,7 @@ function App() {
       </div>
       <div className="card">
         <form onSubmit={handleSubmit(sendPost)}> 
-          <input {...register("content", {required : true})} onChange={onChange} placeholder='Write Your Content' />
+          <input {...register("content", {required : true, maxLength: 7 })} onChange={onChange} placeholder='Write Your Name' />
           <button >
           Post request is {text.length > 0 ? `"${text}"` : ``}
           </button>
