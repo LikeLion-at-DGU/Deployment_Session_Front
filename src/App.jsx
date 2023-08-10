@@ -7,7 +7,7 @@ import {useForm} from "react-hook-form"
 
 
 const PAPI = axios.create({
-  baseURL: "http://15.165.4.227",
+  baseURL: "http://15.165.4.227:8000",
   headers:{
       "Content-Type": "application/json",
   },
@@ -45,6 +45,7 @@ function App() {
         )
         setValue("content" , "")
         setText("")
+        getData();
     } catch(error){
         console.log(error)
     }
@@ -53,7 +54,7 @@ function App() {
 
   useEffect(()=>{
     getData();
-  }, [data])
+  }, [])
 
   return (
     <>
