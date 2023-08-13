@@ -7,7 +7,7 @@ import {useForm} from "react-hook-form"
 
 
 const PAPI = axios.create({
-  baseURL: "http://15.165.4.227",
+  baseURL: import.meta.env.VITE_APP_API,
   headers:{
       "Content-Type": "application/json",
   },
